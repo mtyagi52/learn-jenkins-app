@@ -10,6 +10,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    export NPM_CONFIG_CACHE=$WORKSPACE/.npm
                     ls -la
                     node --version
                     npm --version
