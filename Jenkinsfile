@@ -43,7 +43,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    
+                    export HOME=$WORKSPACE
                     npm ci
 
                     npm install serve
