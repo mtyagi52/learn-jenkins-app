@@ -5,14 +5,12 @@ pipeline {
 
         stage('Build') {
             agent {
-                docker {
-                    image 'node:18'
-                }
+                docker { image 'node:18' }
             }
             steps {
                 sh '''
-                    export NPM_CONFIG_CACHE=$WORKSPACE/.npm
-                    npm ci
+                    export HOME=$WORKSPACE
+                    npm ci --cache $WORKSPACE/.npm
                     npm run build
                 '''
             }
@@ -27,8 +25,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    export NPM_CONFIG_CACHE=$WORKSPACE/.npm
-                    npm ci
+                    export HOME=$WORKSPACE
+                    npm ci --cache $WORKSPACE/.npm
                     npm test
                 '''
             }
@@ -44,11 +42,10 @@ pipeline {
             steps {
                 sh '''
                     export HOME=$WORKSPACE
-                    npm ci
+                    npm ci --cache $WORKSPACE/.npm
 
-                    npm install serve
-                    node_modules/.bin/serve -s build &
-                    sleep 10
+                    npx serve -s build &
+                    npx wait-on http://localhost:3000
 
                     npx playwright test
                 '''
@@ -58,7 +55,7 @@ pipeline {
 
     post {
         always {
-            junit 'jest-results/junit.xml'
+            junit allowEmptyResults: true, testResults: 'jest-results/junit.xml'
         }
     }
 }
