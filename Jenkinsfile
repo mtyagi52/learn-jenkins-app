@@ -44,7 +44,7 @@ pipeline {
                     export HOME=$WORKSPACE
                     npm ci --cache $WORKSPACE/.npm
 
-                    npx node_modules/.bin/serve -s build &
+                    npx serve -s build &
                     npx wait-on http://localhost:3000
 
                     npx playwright test
