@@ -43,7 +43,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    export NPM_CONFIG_CACHE=$WORKSPACE/.npm
+                    
                     npm ci
 
                     npm install serve
